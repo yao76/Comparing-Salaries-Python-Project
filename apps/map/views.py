@@ -42,6 +42,7 @@ def index(request):
             projection=go.layout.geo.Projection(type='albers usa'),
             showlakes=False,  # lakes
             lakecolor='rgb(255, 255, 255)'),
+        margin=dict(t=5,b=5,r=5,l=5)
     )
 
     # fig.show()
@@ -50,12 +51,15 @@ def index(request):
     years = [datetime.datetime(year=2016, month=1, day=1),
             datetime.datetime(year=2017, month=1, day=1),
             datetime.datetime(year=2018, month=1, day=1)]
-
-    graph = go.Figure(data=[go.Scatter(x=years, y=[80000, 83500, 96000])])
+    
+    graph = go.Figure()
+    graph.add_trace(go.Scatter(x=years, y=[80000, 83500, 96000], name="2018"))
+    graph.add_trace(go.Scatter(x=years, y=[50000, 63500, 76000], name="2017"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
         autosize=True,
-        height=300
+        height=200,
+        margin=dict(t=5,b=5,r=5,l=5)
         
         )
 
