@@ -760,6 +760,7 @@ Year,ST,STATE,OCC_CODE,OCC_TITLE,TOT_EMP,LOC_Q,H_MEAN,A_MEAN
 2017,CA,California,15-1121,Computer Systems Analysts,"72,980",1.07,49.45,"102,860"
 2017,CA,California,15-1122,Information Security Analysts,"8,470",0.69,51.97,"108,090"
 2017,CA,California,15-1131,Computer Programmers,"34,050",1.17,46.28,"96,270"
+
 2017,CA,California,15-1132,"Software Developers, Applications","141,870",1.43,60.80,"126,470"
 2017,CA,California,15-1133,"Software Developers, Systems Software","82,630",1.79,61.17,"127,230"
 2017,CA,California,15-1134,Web Developers,"21,150",1.43,40.51,"84,270"
