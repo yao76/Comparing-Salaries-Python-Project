@@ -17,8 +17,8 @@ def index(request):
     for col in df.columns:
         df.loc[col] = df[col].astype(str)
 
-    x = "State: " + df['ST'] + '<br>' + 'Job Title: ' + \
-        df['OCC_TITLE'] + '<br>' + 'Annual Sal: ' + '$' + df['A_MEAN']
+    # x = "State: " + df['ST'] + '<br>' + 'Job Title: ' + \
+    #     df['OCC_TITLE'] + '<br>' + 'Annual Sal: ' + '$' + df['A_MEAN']
 
     # df_year['text'] = df_year['STATE'] + '<br>' + df_year['ST'] + '<br>'  + ' Job ' + '<br>' + df_year['OCC_TITLE'] + '<br>' + df_year['A_MEAN']
     # 'Fruits ' + df_year['total fruits'] + ' Veggies ' + df_year['total veggies'] + '<br>' + \
@@ -30,7 +30,7 @@ def index(request):
         locationmode='USA-states',
         colorscale="greens",
         autocolorscale=False,
-        text=x,  # hover text
+        # text=x,  # hover text
         marker_line_color='white',  # line markers between states
         colorbar_title="USD"
     ))
@@ -52,8 +52,12 @@ def index(request):
             datetime.datetime(year=2018, month=1, day=1)]
 
     graph = go.Figure(data=[go.Scatter(x=years, y=[80000, 83500, 96000])])
-    graph.update_layout(xaxis_range=[datetime.datetime(
-        2016,1,1), datetime.datetime(2018,1,1)])
+    graph.update_layout(
+        xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
+        autosize=True,
+        height=300
+        
+        )
 
     line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
     context = {
