@@ -21,7 +21,7 @@ df_year = df[(df['Year']== 2016 )]
 for col in df_year.columns:
     df_year[col] = df_year[col].astype(str)
 
-df_year['text'] = df_year['STATE']+'ST: ' + df_year['ST'] + ' Job Title: '+df_year['OCC_TITLE']
+df_year['text'] = df_year['STATE']+'ST: ' + df_year['ST'] + ' Job Title: '+df_year['OCC_TITLE'] + df_year['A_MEAN']
 
 # df_year['text'] = df_year['STATE'] + '<br>' + df_year['ST'] + '<br>'  + ' Job ' + '<br>' + df_year['OCC_TITLE'] + '<br>' + df_year['A_MEAN']
     # 'Fruits ' + df['total fruits'] + ' Veggies ' + df['total veggies'] + '<br>' + \
