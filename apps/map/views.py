@@ -8,7 +8,7 @@ from django.shortcuts import render, HttpResponse
 
 # Create your views here.
 def index(request):
-    df = pd.read_csv('data2018.csv')
+    df = pd.read_csv('data2018fixed.csv')
     # df_year = df[(df['Year'] == 2018)]
 
     for col in df.columns:
