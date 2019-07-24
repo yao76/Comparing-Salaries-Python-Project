@@ -36,7 +36,7 @@ def index(request):
     ))
 
     fig.update_layout(
-        title_text='Technical Job<br>(Hover for breakdown)',
+        title_text='Average Salary of Computer/Technical Jobs',
         geo=dict(
             scope='usa',
             projection=go.layout.geo.Projection(type='albers usa'),
@@ -45,7 +45,7 @@ def index(request):
     )
 
     # fig.show()
-    x = offline.plot(fig, include_plotlyjs=False, output_type='div')
+    sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
     years = [datetime.datetime(year=2016, month=1, day=1),
             datetime.datetime(year=2017, month=1, day=1),
@@ -55,10 +55,10 @@ def index(request):
     graph.update_layout(xaxis_range=[datetime.datetime(
         2016,1,1), datetime.datetime(2018,1,1)])
 
-    y = offline.plot(graph, include_plotlyjs=False, output_type='div')
+    line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
     context = {
-    'x': x,
-    'graph' : y
+    'map': sal_map,
+    'line_graph' : line_graph
     }
     return render(request, "map/index.html", context)
 
