@@ -51,7 +51,7 @@ def index(request):
             datetime.datetime(year=2017, month=1, day=1),
             datetime.datetime(year=2018, month=1, day=1)]
 
-    graph = go.Figure(data=[go.Scatter(x=years, y=[1, 3, 6])])
+    graph = go.Figure(data=[go.Scatter(x=years, y=[80000, 83500, 96000])])
     graph.update_layout(xaxis_range=[datetime.datetime(
         2016,1,1), datetime.datetime(2018,1,1)])
 
