@@ -73,7 +73,7 @@ def index(request):
     
     graph = go.Figure()
     graph.add_trace(go.Scatter(x=years, y=[80000, 83500, 96000], name="2018"))
-    graph.add_trace(go.Scatter(x=years, y=[50000, 63500, 76000], name="2017"))
+    graph.add_trace(go.Scatter(x=years, y=[avg2016, avg2017, avg2018], name="National Average"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
         autosize=True,
