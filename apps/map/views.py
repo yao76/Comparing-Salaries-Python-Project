@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly
+import numpy as np
 import plotly.graph_objs as go
 import plotly.offline as offline
 from plotly.graph_objs import *
@@ -45,6 +46,24 @@ def index(request):
         margin=dict(t=5,b=5,r=5,l=5)
     )
 
+    def calc_annual_AVG(csv):
+        data = pd.read_csv(csv)
+
+        codedata = data[(data['OCC_CODE'] == "15-0000")]
+        testArr = codedata['A_MEAN'].tolist()
+        total =0
+        length = len(testArr)
+        for i in range(length):
+            total += int(testArr[i])
+
+        annual_avg = int(total/length)
+        return annual_avg
+
+    avg2018 = calc_annual_AVG("data2018.csv")
+    avg2017 = calc_annual_AVG("data2017.csv")
+    avg2016 = calc_annual_AVG("data2016.csv")
+    print(avg2016, avg2017, avg2018)
+        
     # fig.show()
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
