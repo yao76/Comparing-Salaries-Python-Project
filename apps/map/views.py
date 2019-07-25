@@ -7,6 +7,7 @@ from plotly.graph_objs import *
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 from django.shortcuts import render, HttpResponse
 import datetime
+import json
 
 # Create your views here.
 
@@ -99,16 +100,15 @@ def index(request):
         'WI':48,
         'WY':49}
 
-    def state_annual_AVG(csv, ST_num):
+    def state_annual_AVG(year, ST_num):
         annual_avg = 0
-        data = pd.read_csv(csv)
+        data = pd.read_csv("data"+str(year)+".csv")
         codedata = data[(data['OCC_CODE']== "15-0000")]
         testArr = codedata['A_MEAN'].tolist()
-        print(testArr[ST_num])
         return annual_avg
 
     def calc_annual_AVG(year):
-        data = pd.read_csv("data"+year+".csv")
+        data = pd.read_csv("data"+str(year)+".csv")
         codedata = data[(data['OCC_CODE'] == "15-0000")]
         testArr = codedata['A_MEAN'].tolist()
         total =0
@@ -119,10 +119,13 @@ def index(request):
         annual_avg = int(total/length)
         return annual_avg
 
-    avg2018 = calc_annual_AVG("2018")
-    avg2017 = calc_annual_AVG("2017")
-    avg2016 = calc_annual_AVG("2016")
-    state_annual_AVG("data2018.csv", 0)
+    avg2018 = calc_annual_AVG(2018)
+    avg2017 = calc_annual_AVG(2017)
+    avg2016 = calc_annual_AVG(2016)
+    st_avg2018 = state_annual_AVG(2018, 0)
+    st_avg2017 = state_annual_AVG(2017, 0)
+    st_avg2016 = state_annual_AVG(2016, 0)
+
         
     # fig.show()
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
@@ -132,7 +135,7 @@ def index(request):
             datetime.datetime(year=2018, month=1, day=1)]
     
     graph = go.Figure()
-    graph.add_trace(go.Scatter(x=years, y=[80000, 83500, 96000], name="2018"))
+    graph.add_trace(go.Scatter(x=years, y=[st_avg2016, st_avg2017, st_avg2018], name="2018"))
     graph.add_trace(go.Scatter(x=years, y=[avg2016, avg2017, avg2018], name="National Average"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
