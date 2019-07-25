@@ -49,56 +49,56 @@ def index(request):
     )
 
     state_conv_list = {
-        'AL':0,
-        'AK':1,
-        'AZ':2,
-        'AR':3,
-        'CA':4,
-        'CO':5,
-        'CT':6,
-        'DE':7,
-        'FL':8,
-        'GA':9,
-        'HI':10,
-        'ID':11,
-        'IL':12,
-        'IN':13,
-        'IA':14,
-        'KS':15,
-        'KY':16,
-        'LA':17,
-        'ME':18,
-        'MD':19,
-        'MA':20,
-        'MI':21,
-        'MN':22,
-        'MS':23,
-        'MO':24,
-        'MT':25,
-        'NE':26,
-        'NV':27,
-        'NH':28,
-        'NJ':29,
-        'NM':30,
-        'NY':31,
-        'NC':32,
-        'ND':33,
-        'OH':34,
-        'OK':35,
-        'OR':36,
-        'PA':37,
-        'RI':38,
-        'SC':39,
-        'SD':40,
-        'TN':41,
-        'TX':42,
-        'UT':43,
-        'VT':44,
-        'VA':45,
-        'WA':46,
-        'WV':47,
-        'WI':48,
-        'WY':49}
+        0:'AL',
+        1:'AK',
+        2:'AZ',
+        3:'AR',
+        4:'CA',
+        5:'CO',
+        6:'CT',
+        7:'DE',
+        8:'FL',
+        9:'GA',
+        10:'HI',
+        11:'ID',
+        12:'IL',
+        13:'IN',
+        14:'IA',
+        15:'KS',
+        16:'KY',
+        17:'LA',
+        18:'ME',
+        19:'MD',
+        20:'MA',
+        21:'MI',
+        22:'MN',
+        23:'MS',
+        24:'MO',
+        25:'MT',
+        26:'NE',
+        27:'NV',
+        28:'NH',
+        29:'NJ',
+        30:'NM',
+        31:'NY',
+        32:'NC',
+        33:'ND',
+        34:'OH',
+        35:'OK',
+        36:'OR',
+        37:'PA',
+        38:'RI',
+        39:'SC',
+        40:'SD',
+        41:'TN',
+        42:'TX',
+        43:'UT',
+        44:'VT',
+        45:'VA',
+        46:'WA',
+        47:'WV',
+        48:'WI',
+        49:'WY'}
 
     def state_annual_AVG(year, ST_num):
         annual_avg = 0
@@ -111,19 +111,16 @@ def index(request):
         return annual_avg
 
     def state_jobs(ST_num, jobs=all_jobs):
-        annual_avg = 0
-        allSTList = []
+        annual_avgs = []
+        addSTList = []
         jobList = []
         data = pd.read_csv("data2018.csv")
         for i in range(len(jobs)):
             codedata = data[(data['OCC_CODE']== jobs[i])]
-            # print(jobs[i])
-            # print(codedata)
-            allSTList = codedata['A_MEAN'].tolist()
-        annual_avg = allSTList[ST_num]
-        # print("*"*20)
-        # print(annual_avg, ST_num)
-        return annual_avg
+            addSTList = codedata[(codedata['ST'] == state_conv_list[ST_num])]
+            # print(addSTList)
+            annual_avgs.append([addSTList['OCC_CODE'].tolist(), addSTList['A_MEAN'].tolist()])
+        return annual_avgs
 
     def calc_annual_AVG(year):
         data = pd.read_csv("data"+str(year)+".csv")
@@ -146,7 +143,7 @@ def index(request):
     # print(avg2016,avg2017,avg2018)
     # print(st_avg2016,st_avg2017,st_avg2018)
 
-    print(state_jobs(46))
+    print(state_jobs(5))
     # fig.show()
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
