@@ -7,6 +7,7 @@ from plotly.graph_objs import *
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 from django.shortcuts import render, HttpResponse
 import datetime
+import json
 
 # Create your views here.
 
@@ -32,7 +33,7 @@ def index(request):
         marker_line_color='white',  # line markers between states
         colorbar_title="USD"
     ))
-    
+    all_jobs = ["15-0000",'15-1121','15-1131','15-1132','15-1133','15-1134','15-1141','15-1142','15-1143','15-1151','15-1152','15-1199','15-1111','15-1122']
 
     fig.update_layout(
         title_text='Average Salary of Computer/Technical Jobs',
@@ -45,67 +46,81 @@ def index(request):
     )
 
     state_conv_list = {
-        'AL':0,
-        'AK':1,
-        'AZ':2,
-        'AR':3,
-        'CA':4,
-        'CO':5,
-        'CT':6,
-        'DE':7,
-        'FL':8,
-        'GA':9,
-        'HI':10,
-        'ID':11,
-        'IL':12,
-        'IN':13,
-        'IA':14,
-        'KS':15,
-        'KY':16,
-        'LA':17,
-        'ME':18,
-        'MD':19,
-        'MA':20,
-        'MI':21,
-        'MN':22,
-        'MS':23,
-        'MO':24,
-        'MT':25,
-        'NE':26,
-        'NV':27,
-        'NH':28,
-        'NJ':29,
-        'NM':30,
-        'NY':31,
-        'NC':32,
-        'ND':33,
-        'OH':34,
-        'OK':35,
-        'OR':36,
-        'PA':37,
-        'RI':38,
-        'SC':39,
-        'SD':40,
-        'TN':41,
-        'TX':42,
-        'UT':43,
-        'VT':44,
-        'VA':45,
-        'WA':46,
-        'WV':47,
-        'WI':48,
-        'WY':49}
-        
-    def state_annual_AVG(csv, ST_num):
-        annual_avg = 0
-        data = pd.read_csv(csv)
-        codedata = data[(data['OCC_CODE']== "15-0000")]
-        testArr = codedata['A_MEAN'].tolist()
-        print(testArr[ST_num])
-        return annual_avg
-    def calc_annual_AVG(csv):
-        data = pd.read_csv(csv)
+        0:'AL',
+        1:'AK',
+        2:'AZ',
+        3:'AR',
+        4:'CA',
+        5:'CO',
+        6:'CT',
+        7:'DE',
+        8:'FL',
+        9:'GA',
+        10:'HI',
+        11:'ID',
+        12:'IL',
+        13:'IN',
+        14:'IA',
+        15:'KS',
+        16:'KY',
+        17:'LA',
+        18:'ME',
+        19:'MD',
+        20:'MA',
+        21:'MI',
+        22:'MN',
+        23:'MS',
+        24:'MO',
+        25:'MT',
+        26:'NE',
+        27:'NV',
+        28:'NH',
+        29:'NJ',
+        30:'NM',
+        31:'NY',
+        32:'NC',
+        33:'ND',
+        34:'OH',
+        35:'OK',
+        36:'OR',
+        37:'PA',
+        38:'RI',
+        39:'SC',
+        40:'SD',
+        41:'TN',
+        42:'TX',
+        43:'UT',
+        44:'VT',
+        45:'VA',
+        46:'WA',
+        47:'WV',
+        48:'WI',
+        49:'WY'}
 
+    def state_annual_AVG(year, ST_num):
+        annual_avg = 0
+        allSTList = []
+        jobList = []
+        data = pd.read_csv("data"+str(year)+".csv")
+        codedata = data[(data['OCC_CODE']== '15-0000')]
+        allSTList = codedata['A_MEAN'].tolist()
+        annual_avg = allSTList[ST_num]
+        return annual_avg
+
+    def state_jobs(ST_num, jobs=all_jobs):
+        annual_avgs = []
+        addSTList = []
+        jobList = []
+        data = pd.read_csv("data2018.csv")
+        for i in range(len(jobs)):
+            codedata = data[(data['OCC_CODE']== jobs[i])]
+            addSTList = codedata[(codedata['ST'] == state_conv_list[ST_num])]
+            # print(addSTList)
+            annual_avgs.append([addSTList['OCC_CODE'].tolist(), addSTList['A_MEAN'].tolist()])
+        return annual_avgs
+
+    def calc_annual_AVG(year):
+        data = pd.read_csv("data"+str(year)+".csv")
         codedata = data[(data['OCC_CODE'] == "15-0000")]
         testArr = codedata['A_MEAN'].tolist()
         total =0
@@ -116,11 +131,16 @@ def index(request):
         annual_avg = int(total/length)
         return annual_avg
 
-    avg2018 = calc_annual_AVG("data2018.csv")
-    avg2017 = calc_annual_AVG("data2017.csv")
-    avg2016 = calc_annual_AVG("data2016.csv")
-    state_annual_AVG("data2018.csv", 0)
-        
+    avg2018 = calc_annual_AVG(2018)
+    avg2017 = calc_annual_AVG(2017)
+    avg2016 = calc_annual_AVG(2016)
+    st_avg2018 = state_annual_AVG(2018, 0)
+    st_avg2017 = state_annual_AVG(2017, 0)
+    st_avg2016 = state_annual_AVG(2016, 0)
+    # print(avg2016,avg2017,avg2018)
+    # print(st_avg2016,st_avg2017,st_avg2018)
+
+    print(state_jobs(5))
     # fig.show()
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
@@ -129,7 +149,7 @@ def index(request):
             datetime.datetime(year=2018, month=1, day=1)]
     
     graph = go.Figure()
-    graph.add_trace(go.Scatter(x=years, y=[80000, 83500, 96000], name="2018"))
+    graph.add_trace(go.Scatter(x=years, y=[st_avg2016, st_avg2017, st_avg2018], name="Alabama"))
     graph.add_trace(go.Scatter(x=years, y=[avg2016, avg2017, avg2018], name="National Average"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
