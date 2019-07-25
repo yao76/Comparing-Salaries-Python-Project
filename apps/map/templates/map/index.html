@@ -1,3 +1,75 @@
-<!-- <h1>Stupid Map</h1> -->
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-{{x|safe}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+            $("#state2").on('change', function(){
+                $(ajax({
+                    
+                }))
+                console.log("list item selected");
+                var val = $(this).val();    
+                console.log(val);
+        });
+    });
+    </script>
+    <style>
+    
+    .col {
+        border: 1px solid blue;
+    }
+    
+    </style>
+</head>
+<body>
+        <nav class="green lighten-2 z-depth-0">
+            <span class="brand-logo">CompSal</span>
+        </nav>
+        <div class="row">
+            <div class="col s7">
+                {{map|safe}}
+            </div>
+            <div class="col s5">
+                <p>Pick a state to compare values</p>
+                <div class="input-field col s6">
+                    <select name="state" id="state">
+                        <option value="WA" selected >Washington</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                    </select>
+                    <label for="state">State</label>
+                </div>
+                <div class="input-field col s6">
+                    <select name="state" id="state2">
+                        <option value="" selected disabled>Pick a state</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                    </select>
+                    <label for="state2">State</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                {{line_graph | safe}}
+            </div>
+        </div>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'></script>
+</body>
+</html> 
