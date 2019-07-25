@@ -5,8 +5,9 @@ import plotly.graph_objs as go
 import plotly.offline as offline
 from plotly.graph_objs import *
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 import datetime
+
 
 # Create your views here.
 
@@ -191,3 +192,134 @@ def index(request):
     "statesNoWA": statesNoWA
     }
     return render(request, "map/index.html", context)
+
+
+def test2(request,st1,st2):
+    print(st1, st2)
+    years = [datetime.datetime(year=2016, month=1, day=1),
+            datetime.datetime(year=2017, month=1, day=1),
+            datetime.datetime(year=2018, month=1, day=1)]
+    
+    graph = go.Figure()
+    graph.add_trace(go.Scatter(x=years, y=[80000, 83500, 96000], name="2018"))
+    graph.add_trace(go.Scatter(x=years, y=[50000, 63500, 76000], name="2017"))
+    graph.update_layout(
+        xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
+        autosize=True,
+        height=200,
+        margin=dict(t=5,b=5,r=5,l=5)
+        )
+    
+    states = {
+        "Alabama":"AL",
+        "Alaska":"AK",
+        "Arizona":"AZ",
+        "Arkansas":"AR",
+        "California":"CA",
+        "Colorado":"CO",
+        "Connecticut":"CT",
+        "Delaware":"DE",
+        "Florida":"FL",
+        "Georgia":"GA",
+        "Hawaii":"HI",
+        "Idaho":"ID",
+        "Illinois":"IL",
+        "Indiana":"IN",
+        "Iowa":"IA",
+        "Kansas":"KS",
+        "Kentucky":"KY",
+        "Louisiana":"LA",
+        "Maine":"ME",
+        "Maryland":"MD",
+        "Massachusetts":"MA",
+        "Michigan":"MI",
+        "Minnesota":"MN",
+        "Mississippi":"MS",
+        "Missouri":"MO",
+        "Montana":"MT",
+        "Nebraska":"NE",
+        "Nevada":"NV",
+        "New Hampshire":"NH",
+        "New Jersey":"NJ",
+        "New Mexico":"NM",
+        "New York":"NY",
+        "North Carolina":"NC",
+        "North Dakota":"ND",
+        "Ohio":"OH",
+        "Oklahoma":"OK",
+        "Oregon":"OR",
+        "Pennsylvania":"PA",
+        "Rhode Island":"RI",
+        "South Carolina":"SC",
+        "South Dakota":"SD",
+        "Tennessee":"TN",
+        "Texas":"TX",
+        "Utah":"UT",
+        "Vermont":"VT",
+        "Virginia":"VA",
+        "Washington":"WA",
+        "West Virginia":"WV",
+        "Wisconsin":"WI",
+        "Wyoming":"WY"
+    }
+    statesNoWA = {
+        "Alabama":"AL",
+        "Alaska":"AK",
+        "Arizona":"AZ",
+        "Arkansas":"AR",
+        "California":"CA",
+        "Colorado":"CO",
+        "Connecticut":"CT",
+        "Delaware":"DE",
+        "Florida":"FL",
+        "Georgia":"GA",
+        "Hawaii":"HI",
+        "Idaho":"ID",
+        "Illinois":"IL",
+        "Indiana":"IN",
+        "Iowa":"IA",
+        "Kansas":"KS",
+        "Kentucky":"KY",
+        "Louisiana":"LA",
+        "Maine":"ME",
+        "Maryland":"MD",
+        "Massachusetts":"MA",
+        "Michigan":"MI",
+        "Minnesota":"MN",
+        "Mississippi":"MS",
+        "Missouri":"MO",
+        "Montana":"MT",
+        "Nebraska":"NE",
+        "Nevada":"NV",
+        "New Hampshire":"NH",
+        "New Jersey":"NJ",
+        "New Mexico":"NM",
+        "New York":"NY",
+        "North Carolina":"NC",
+        "North Dakota":"ND",
+        "Ohio":"OH",
+        "Oklahoma":"OK",
+        "Oregon":"OR",
+        "Pennsylvania":"PA",
+        "Rhode Island":"RI",
+        "South Carolina":"SC",
+        "South Dakota":"SD",
+        "Tennessee":"TN",
+        "Texas":"TX",
+        "Utah":"UT",
+        "Vermont":"VT",
+        "Virginia":"VA",
+        "West Virginia":"WV",
+        "Wisconsin":"WI",
+        "Wyoming":"WY"
+    }
+    
+    line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
+    context = {
+    'line_graph' : line_graph,
+    }
+    return render(request,"map/test.html", context)
+
+def test(request,st1,st2):
+    return redirect(f'/test2/{st1}/{st2}')
+    
