@@ -36,7 +36,7 @@ def index(request):
         marker_line_color='white',  # line markers between states
         colorbar_title="USD"
     ))
-    
+    all_jobs = ["15-0000",'15-1121','15-1131','15-1132','15-1133','15-1134','15-1141','15-1142','15-1143','15-1151','15-1152','15-1199','15-1111','15-1122']
 
     fig.update_layout(
         title_text='Average Salary of Computer/Technical Jobs',
@@ -102,9 +102,27 @@ def index(request):
 
     def state_annual_AVG(year, ST_num):
         annual_avg = 0
+        allSTList = []
+        jobList = []
         data = pd.read_csv("data"+str(year)+".csv")
-        codedata = data[(data['OCC_CODE']== "15-0000")]
-        testArr = codedata['A_MEAN'].tolist()
+        codedata = data[(data['OCC_CODE']== '15-0000')]
+        allSTList = codedata['A_MEAN'].tolist()
+        annual_avg = allSTList[ST_num]
+        return annual_avg
+
+    def state_jobs(ST_num, jobs=all_jobs):
+        annual_avg = 0
+        allSTList = []
+        jobList = []
+        data = pd.read_csv("data2018.csv")
+        for i in range(len(jobs)):
+            codedata = data[(data['OCC_CODE']== jobs[i])]
+            # print(jobs[i])
+            # print(codedata)
+            allSTList = codedata['A_MEAN'].tolist()
+        annual_avg = allSTList[ST_num]
+        # print("*"*20)
+        # print(annual_avg, ST_num)
         return annual_avg
 
     def calc_annual_AVG(year):
@@ -125,8 +143,10 @@ def index(request):
     st_avg2018 = state_annual_AVG(2018, 0)
     st_avg2017 = state_annual_AVG(2017, 0)
     st_avg2016 = state_annual_AVG(2016, 0)
+    # print(avg2016,avg2017,avg2018)
+    # print(st_avg2016,st_avg2017,st_avg2018)
 
-        
+    print(state_jobs(46))
     # fig.show()
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
@@ -135,7 +155,7 @@ def index(request):
             datetime.datetime(year=2018, month=1, day=1)]
     
     graph = go.Figure()
-    graph.add_trace(go.Scatter(x=years, y=[st_avg2016, st_avg2017, st_avg2018], name="2018"))
+    graph.add_trace(go.Scatter(x=years, y=[st_avg2016, st_avg2017, st_avg2018], name="Alabama"))
     graph.add_trace(go.Scatter(x=years, y=[avg2016, avg2017, avg2018], name="National Average"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],

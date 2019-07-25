@@ -109,20 +109,6 @@ Year,ST,STATE,OCC_CODE,OCC_TITLE,LOC_Q,A_MEAN,H_MEAN,TOT_EMP
 2016,DE,Delaware,15-1151,Computer User Support Specialists,0.77,55950,26.9,1460
 2016,DE,Delaware,15-1152,Computer Network Support Specialists,1.04,70570,33.93,620
 2016,DE,Delaware,15-1199,"Computer Occupations, All Other",**,78570,37.77,**
-2016,DC,District of Columbia,15-0000,Computer and Mathematical Occupations,1.99,103580,49.8,41390
-2016,DC,District of Columbia,15-1111,Computer and Information Research Scientists,4.8,123490,59.37,640
-2016,DC,District of Columbia,15-1121,Computer Systems Analysts,1.57,101240,48.67,4460
-2016,DC,District of Columbia,15-1122,Information Security Analysts,1.76,123850,59.54,850
-2016,DC,District of Columbia,15-1131,Computer Programmers,1.01,96070,46.19,1370
-2016,DC,District of Columbia,15-1132,"Software Developers, Applications",0.59,112040,53.86,2330
-2016,DC,District of Columbia,15-1133,"Software Developers, Systems Software",1.48,107640,51.75,3040
-2016,DC,District of Columbia,15-1134,Web Developers,1.95,86730,41.7,1270
-2016,DC,District of Columbia,15-1141,Database Administrators,1.68,101380,48.74,950
-2016,DC,District of Columbia,15-1142,Network and Computer Systems Administrators,1.44,96290,46.3,2710
-2016,DC,District of Columbia,15-1143,Computer Network Architects,1.56,109570,52.68,1230
-2016,DC,District of Columbia,15-1151,Computer User Support Specialists,1.46,64960,31.23,4390
-2016,DC,District of Columbia,15-1152,Computer Network Support Specialists,0.82,89460,43.01,780
-2016,DC,District of Columbia,15-1199,"Computer Occupations, All Other",11.26,114440,55.02,14720
 2016,FL,Florida,15-0000,Computer and Mathematical Occupations,0.79,74480,35.81,193670
 2016,FL,Florida,15-1111,Computer and Information Research Scientists,0.32,101050,48.58,500
 2016,FL,Florida,15-1121,Computer Systems Analysts,0.54,82830,39.82,18050
