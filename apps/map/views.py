@@ -18,8 +18,8 @@ def index(request):
     for col in df.columns:
         df.loc[col] = df[col].astype(str)
 
-    # x = "State: " + df['ST'] + '<br>' + 'Job Title: ' + \
-    #     df['OCC_TITLE'] + '<br>' + 'Annual Sal: ' + '$' + df['A_MEAN']
+    x = "State: " + df['ST'] + '<br>' + 'Job Title: ' + \
+        df['OCC_TITLE'] + '<br>' + 'Annual Sal: ' + '$' + df['A_MEAN']
 
     # df_year['text'] = df_year['STATE'] + '<br>' + df_year['ST'] + '<br>'  + ' Job ' + '<br>' + df_year['OCC_TITLE'] + '<br>' + df_year['A_MEAN']
     # 'Fruits ' + df_year['total fruits'] + ' Veggies ' + df_year['total veggies'] + '<br>' + \
@@ -31,7 +31,7 @@ def index(request):
         locationmode='USA-states',
         colorscale="greens",
         autocolorscale=False,
-        # text=x,  # hover text
+        text=x,  # hover text
         marker_line_color='white',  # line markers between states
         colorbar_title="USD"
     ))
@@ -98,7 +98,7 @@ def index(request):
         'WV':47,
         'WI':48,
         'WY':49}
-        
+
     def state_annual_AVG(csv, ST_num):
         annual_avg = 0
         data = pd.read_csv(csv)
@@ -106,9 +106,9 @@ def index(request):
         testArr = codedata['A_MEAN'].tolist()
         print(testArr[ST_num])
         return annual_avg
-    def calc_annual_AVG(csv):
-        data = pd.read_csv(csv)
 
+    def calc_annual_AVG(year):
+        data = pd.read_csv("data"+year+".csv")
         codedata = data[(data['OCC_CODE'] == "15-0000")]
         testArr = codedata['A_MEAN'].tolist()
         total =0
@@ -119,9 +119,9 @@ def index(request):
         annual_avg = int(total/length)
         return annual_avg
 
-    avg2018 = calc_annual_AVG("data2018.csv")
-    avg2017 = calc_annual_AVG("data2017.csv")
-    avg2016 = calc_annual_AVG("data2016.csv")
+    avg2018 = calc_annual_AVG("2018")
+    avg2017 = calc_annual_AVG("2017")
+    avg2016 = calc_annual_AVG("2016")
     state_annual_AVG("data2018.csv", 0)
         
     # fig.show()
