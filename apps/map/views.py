@@ -137,9 +137,9 @@ def index(request):
     avg2018 = calc_annual_AVG(2018)
     avg2017 = calc_annual_AVG(2017)
     avg2016 = calc_annual_AVG(2016)
-    st_avg2018 = state_annual_AVG(2018, 0)
-    st_avg2017 = state_annual_AVG(2017, 0)
-    st_avg2016 = state_annual_AVG(2016, 0)
+    st_avg2018 = state_annual_AVG(2018, 46)
+    st_avg2017 = state_annual_AVG(2017, 46)
+    st_avg2016 = state_annual_AVG(2016, 46)
     # print(avg2016,avg2017,avg2018)
     # print(st_avg2016,st_avg2017,st_avg2018)
 
@@ -152,7 +152,7 @@ def index(request):
             datetime.datetime(year=2018, month=1, day=1)]
     
     graph = go.Figure()
-    graph.add_trace(go.Scatter(x=years, y=[st_avg2016, st_avg2017, st_avg2018], name="Alabama"))
+    graph.add_trace(go.Scatter(x=years, y=[st_avg2016, st_avg2017, st_avg2018], name="Washington"))
     graph.add_trace(go.Scatter(x=years, y=[avg2016, avg2017, avg2018], name="National Average"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
