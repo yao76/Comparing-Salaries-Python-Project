@@ -34,26 +34,22 @@
             <div class="col s5">
                 <p>Pick a state to compare values</p>
                 <div class="input-field col s6">
-                    <select name="state" id="state">
+                    <select name="state" id="state1">
                         <option value="WA" selected >Washington</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
+                        {% for key, value in statesNoWA.items %}
+                            <option value="{{value}}">{{key}}</option>
+                        {% endfor   %}
                     </select>
                     <label for="state">State</label>
                 </div>
                 <div class="input-field col s6">
-                    <select name="state" id="state2">
-                        <option value="" selected disabled>Pick a state</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
+                    <select type="text" name="state" id="state2">
+                        <option value="" selected>Pick a state</option>
+                        {% for key, value in states.items %}
+                            <option value="{{value}}">{{key}}</option>
+                        {% endfor   %}
                     </select>
-                    <label for="state2">State</label>
+                    <label for="state2">Compare State</label>
                 </div>
             </div>
         </div>
