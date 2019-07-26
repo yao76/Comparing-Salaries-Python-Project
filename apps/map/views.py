@@ -10,8 +10,48 @@ from django.shortcuts import render, HttpResponse, redirect
 import datetime
 import json
 
+all_jobs = ["15-0000", '15-1121', '15-1131', '15-1132', '15-1133', '15-1134', '15-1141',
+                '15-1142', '15-1143', '15-1151', '15-1152', '15-1199', '15-1111', '15-1122']
 
+def state_annual_AVG(year, ST_num):
+    annual_avg = 0
+    allSTList = []
+    jobList = []
+    data = pd.read_csv("data"+str(year)+".csv")
+    codedata = data[(data['OCC_CODE'] == '15-0000')]
+    allSTList = codedata['A_MEAN'].tolist()
+    annual_avg = allSTList[ST_num]
+    return annual_avg
 
+def calc_annual_AVG(year):
+    data = pd.read_csv("data"+str(year)+".csv")
+    codedata = data[(data['OCC_CODE'] == "15-0000")]
+    testArr = codedata['A_MEAN'].tolist()
+    total = 0
+    length = len(testArr)
+    for i in range(length):
+        total += int(testArr[i])
+
+    annual_avg = int(total/length)
+    return annual_avg
+
+def state_jobs(ST_num, jobs=all_jobs):
+    annual_avgs = []
+    addSTList = []
+    jobList = []
+    data = pd.read_csv("data2018.csv")
+    for i in range(len(jobs)):
+        codedata = data[(data['OCC_CODE'] == jobs[i])]
+        addSTList = codedata[(codedata['ST'] == state_conv_list[ST_num])]
+        # print(addSTList)
+        annual_avgs.append(
+            [addSTList['OCC_CODE'].tolist(), addSTList['A_MEAN'].tolist()])
+    return annual_avgs
+
+def drawlineGraph():
+        line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
+        return line_graph
+    
 
 # Create your views here.
 def index(request):
@@ -131,14 +171,13 @@ def index(request):
         locations=df['ST'],
         z=df['A_MEAN'],
         locationmode='USA-states',
-        colorscale="greens",
+        colorscale="greens",    #<----Color for map
         autocolorscale=False,
         text=x,  # hover text
         marker_line_color='white',  # line markers between states
         colorbar_title="USD"
     ))
-    all_jobs = ["15-0000", '15-1121', '15-1131', '15-1132', '15-1133', '15-1134', '15-1141',
-                '15-1142', '15-1143', '15-1151', '15-1152', '15-1199', '15-1111', '15-1122']
+    
 
     fig.update_layout(
         title_text='Average Salary of Computer/Technical Jobs',
@@ -202,40 +241,11 @@ def index(request):
         48: 'WI',
         49: 'WY'}
 
-    def state_annual_AVG(year, ST_num):
-        annual_avg = 0
-        allSTList = []
-        jobList = []
-        data = pd.read_csv("data"+str(year)+".csv")
-        codedata = data[(data['OCC_CODE'] == '15-0000')]
-        allSTList = codedata['A_MEAN'].tolist()
-        annual_avg = allSTList[ST_num]
-        return annual_avg
+    
 
-    def state_jobs(ST_num, jobs=all_jobs):
-        annual_avgs = []
-        addSTList = []
-        jobList = []
-        data = pd.read_csv("data2018.csv")
-        for i in range(len(jobs)):
-            codedata = data[(data['OCC_CODE'] == jobs[i])]
-            addSTList = codedata[(codedata['ST'] == state_conv_list[ST_num])]
-            # print(addSTList)
-            annual_avgs.append(
-                [addSTList['OCC_CODE'].tolist(), addSTList['A_MEAN'].tolist()])
-        return annual_avgs
+    
 
-    def calc_annual_AVG(year):
-        data = pd.read_csv("data"+str(year)+".csv")
-        codedata = data[(data['OCC_CODE'] == "15-0000")]
-        testArr = codedata['A_MEAN'].tolist()
-        total = 0
-        length = len(testArr)
-        for i in range(length):
-            total += int(testArr[i])
-
-        annual_avg = int(total/length)
-        return annual_avg
+    
 
     for num, state in state_conv_list.items():
         if 'state1' not in request.session:
@@ -534,9 +544,6 @@ def test2(request,st1,st2):
         "Wisconsin":"WI",
         "Wyoming":"WY"
     }
-    def drawlineGraph():
-        line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
-        return line_graph
     line_graph = drawlineGraph()
 
     context = {
@@ -547,5 +554,8 @@ def test2(request,st1,st2):
 def test(request,st1,st2):
     request.session['state1'] = st1
     request.session['state2'] = st2
-    # drawlineGraph()
+    drawlineGraph()
     return redirect(f'/test2/{st1}/{st2}')
+
+def buildBarChart(st_info1, st_info2, st1_name, st2_name):
+    pass
