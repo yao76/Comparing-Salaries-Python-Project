@@ -7,6 +7,7 @@ from plotly.graph_objs import *
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 from django.shortcuts import render, HttpResponse, redirect
 import datetime
+import requests
 
 
 # Create your views here.
@@ -321,5 +322,9 @@ def test2(request,st1,st2):
     return render(request,"map/test.html", context)
 
 def test(request,st1,st2):
+    if request.session['state1']:
+        request.session['state1'] = st1
+    if request.session['state2']:
+        request.session['state2'] = st2
     return redirect(f'/test2/{st1}/{st2}')
     
