@@ -11,6 +11,8 @@ import datetime
 import json
 
 
+
+
 # Create your views here.
 def index(request):
     states = {
@@ -236,10 +238,15 @@ def index(request):
         return annual_avg
 
     for num, state in state_conv_list.items():
-        if state == request.session['state1']:
-            state_num1 = num
-        if state == request.session['state2']:
-            state_num2 = num
+        if 'state1' not in request.session:
+            request.session['state1'] = "WA"
+        else:
+            if state == request.session['state1']:
+                state_num1 = num
+            if state == request.session['state2']:
+                state_num2 = num
+            
+    state_name1 = "Washington"
 
     for state, abbv in states.items():
         if request.session['state1'] == abbv:
@@ -255,17 +262,17 @@ def index(request):
     st1_avg2018 = state_annual_AVG(2018, state_num1)
     st1_avg2017 = state_annual_AVG(2017, state_num1)
     st1_avg2016 = state_annual_AVG(2016, state_num1)
-    st2_avg2018 = state_annual_AVG(2018, state_num2)
-    st2_avg2017 = state_annual_AVG(2017, state_num2)
-    st2_avg2016 = state_annual_AVG(2016, state_num2)
+    if ('state2' in request.session) and (request.session['state2'] != ""):    
+        st2_avg2018 = state_annual_AVG(2018, state_num2)
+        st2_avg2017 = state_annual_AVG(2017, state_num2)
+        st2_avg2016 = state_annual_AVG(2016, state_num2)
     
     
     # fig.show()
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
     years = [datetime.datetime(year=2016, month=1, day=1),
-             datetime.datetime(year=2017, month=1, day=1),
-             datetime.datetime(year=2018, month=1, day=1)]
+datetime.datetime(year=2017, month=1, day=1),datetime.datetime(year=2018, month=1, day=1)]
 
     graph = go.Figure()
     graph.add_trace(go.Scatter(x=years, y=[st1_avg2016, st1_avg2017, st1_avg2018], name=state_name1))
