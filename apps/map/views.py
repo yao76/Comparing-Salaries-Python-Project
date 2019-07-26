@@ -264,9 +264,11 @@ def index(request):
 
     for col in df.columns:
         df.loc[col] = df[col].astype(str)
-
+    
     x = "State: " + df['ST'] + '<br>' + 'Job Title: ' + \
-        df['OCC_TITLE'] + '<br>' + 'Annual Sal: ' + '$' + df['A_MEAN']
+        "Computer and Technical Occupations"+ '<br>' + \
+        'Annual Sal: ' + '$' + df['A_MEAN'] + "<br>" + \
+        "Total Employed: "+ df['TOT_EMP']
     
     color = request.session['color']
 
@@ -282,7 +284,7 @@ def index(request):
     ))
     
     fig.update_layout(
-        title_text='Average Salary of Computer/Technical Jobs',
+        title_text=' 2018 Average Salary of Computer/Technical Jobs',
         geo=dict(
             scope='usa',
             projection=go.layout.geo.Projection(type='albers usa'),
