@@ -253,7 +253,7 @@ def index(request):
     for state, abbv in states.items():
         if request.session['state1'] == abbv:
             state_name1 = state
-        if (request.session['state2'] == abbv) and (request.session['state2'] != ""):
+        if (request.session['state2'] == abbv):
             state_name2 = state
             
     print(state_name1, state_name2)
@@ -264,15 +264,16 @@ def index(request):
     st1_avg2018 = state_annual_AVG(2018, state_num1)
     st1_avg2017 = state_annual_AVG(2017, state_num1)
     st1_avg2016 = state_annual_AVG(2016, state_num1)
-    if ('state2' in request.session) and (request.session['state2'] != ""):    
+    if ('state2' in request.session):    
         st2_avg2018 = state_annual_AVG(2018, state_num2)
         st2_avg2017 = state_annual_AVG(2017, state_num2)
         st2_avg2016 = state_annual_AVG(2016, state_num2)
     
     
     # fig.show()
-    sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
+    sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
+#line graph starts here **************************************
     years = [datetime.datetime(year=2016, month=1, day=1),
 datetime.datetime(year=2017, month=1, day=1),datetime.datetime(year=2018, month=1, day=1)]
 
