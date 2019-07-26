@@ -48,11 +48,6 @@ def state_jobs(ST_num, jobs=all_jobs):
             [addSTList['OCC_CODE'].tolist(), addSTList['A_MEAN'].tolist()])
     return annual_avgs
 
-def drawlineGraph():
-        line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
-        return line_graph
-    
-
 # Create your views here.
 def index(request):
     states = {
@@ -436,6 +431,7 @@ def test2(request,st1,st2):
         height=200,
         margin=dict(t=5,b=5,r=5,l=5)
         )
+    line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
     
     states = {
         "Alabama":"AL",
@@ -540,7 +536,10 @@ def test2(request,st1,st2):
         "Wisconsin":"WI",
         "Wyoming":"WY"
     }
-    line_graph = drawlineGraph()
+    
+    def drawlineGraph():
+        line_graph = drawlineGraph()
+        return line_graph
 
     context = {
     'line_graph' : line_graph,
