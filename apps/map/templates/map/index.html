@@ -9,6 +9,31 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <title>Document</title>
+    <script>
+        $(document).ready(function(){
+            var st1 = "WA";    
+            var st2;    
+            $('select').formSelect();
+            $("#state1").on('change', function(){
+                st1 = $(this).val();
+                console.log(st1)
+            })
+            $("#state2").on('change', function(e){
+                e.preventDefault()
+                st2 = $(this).val();
+                console.log(st2)
+                $.ajax({
+                    url: `/test/${st1}/${st2}`,
+                    method: 'get',
+                    data: "",
+                    success: function(serverResponse){
+                        $('#popgraph').html(serverResponse);
+                    }
+                })
+                console.log("list item selected");
+        });
+    });
+    </script>
     <style>
     
     .col {
@@ -16,14 +41,8 @@
     }
     
     </style>
-    <script>
-    $(document).ready(function(){
-        $('select').formSelect();
-    });
-    </script>
 </head>
 <body>
-    <div class="container">
         <nav class="green lighten-2 z-depth-0">
             <span class="brand-logo">CompSal</span>
         </nav>
@@ -34,6 +53,7 @@
             <div class="col s5">
                 <p>Pick a state to compare values</p>
                 <div class="input-field col s6">
+                    {% csrf_token %}
                     <select name="state" id="state1">
                         <option value="WA" selected >Washington</option>
                         {% for key, value in statesNoWA.items %}
@@ -58,7 +78,7 @@
                 {{line_graph | safe}}
             </div>
         </div>
-    </div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'></script>
+        <div id="popgraph"></div>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'></script>
 </body>
-</html>
+</html> 
