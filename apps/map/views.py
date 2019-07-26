@@ -210,9 +210,9 @@ datetime.datetime(year=2017, month=1, day=1),datetime.datetime(year=2018, month=
     graph.add_trace(go.Scatter(x=years, y=[avg2016, avg2017, avg2018], name="National Average"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(
-            2016, 1, 1), datetime.datetime(2018, 1, 1)],
+            2015, 12, 1), datetime.datetime(2018, 2, 1)],
         autosize=True,
-        height=200,
+        height=275,
         margin=dict(t=5,b=5,r=5,l=5)
         )
     line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
