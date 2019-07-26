@@ -264,8 +264,8 @@ def index(request):
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
     years = [datetime.datetime(year=2016, month=1, day=1),
-             datetime.datetime(year=2017, month=1, day=1),
-             datetime.datetime(year=2018, month=1, day=1)]
+            datetime.datetime(year=2017, month=1, day=1),
+            datetime.datetime(year=2018, month=1, day=1)]
 
     graph = go.Figure()
     graph.add_trace(go.Scatter(x=years, y=[st1_avg2016, st1_avg2017, st1_avg2018], name=state_name1))
