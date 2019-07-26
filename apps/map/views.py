@@ -11,9 +11,110 @@ import json
 
 
 # Create your views here.
-
-
 def index(request):
+    states = {
+        "Alabama":"AL",
+        "Alaska":"AK",
+        "Arizona":"AZ",
+        "Arkansas":"AR",
+        "California":"CA",
+        "Colorado":"CO",
+        "Connecticut":"CT",
+        "Delaware":"DE",
+        "Florida":"FL",
+        "Georgia":"GA",
+        "Hawaii":"HI",
+        "Idaho":"ID",
+        "Illinois":"IL",
+        "Indiana":"IN",
+        "Iowa":"IA",
+        "Kansas":"KS",
+        "Kentucky":"KY",
+        "Louisiana":"LA",
+        "Maine":"ME",
+        "Maryland":"MD",
+        "Massachusetts":"MA",
+        "Michigan":"MI",
+        "Minnesota":"MN",
+        "Mississippi":"MS",
+        "Missouri":"MO",
+        "Montana":"MT",
+        "Nebraska":"NE",
+        "Nevada":"NV",
+        "New Hampshire":"NH",
+        "New Jersey":"NJ",
+        "New Mexico":"NM",
+        "New York":"NY",
+        "North Carolina":"NC",
+        "North Dakota":"ND",
+        "Ohio":"OH",
+        "Oklahoma":"OK",
+        "Oregon":"OR",
+        "Pennsylvania":"PA",
+        "Rhode Island":"RI",
+        "South Carolina":"SC",
+        "South Dakota":"SD",
+        "Tennessee":"TN",
+        "Texas":"TX",
+        "Utah":"UT",
+        "Vermont":"VT",
+        "Virginia":"VA",
+        "Washington":"WA",
+        "West Virginia":"WV",
+        "Wisconsin":"WI",
+        "Wyoming":"WY"
+    }
+    statesNoWA = {
+        "Alabama":"AL",
+        "Alaska":"AK",
+        "Arizona":"AZ",
+        "Arkansas":"AR",
+        "California":"CA",
+        "Colorado":"CO",
+        "Connecticut":"CT",
+        "Delaware":"DE",
+        "Florida":"FL",
+        "Georgia":"GA",
+        "Hawaii":"HI",
+        "Idaho":"ID",
+        "Illinois":"IL",
+        "Indiana":"IN",
+        "Iowa":"IA",
+        "Kansas":"KS",
+        "Kentucky":"KY",
+        "Louisiana":"LA",
+        "Maine":"ME",
+        "Maryland":"MD",
+        "Massachusetts":"MA",
+        "Michigan":"MI",
+        "Minnesota":"MN",
+        "Mississippi":"MS",
+        "Missouri":"MO",
+        "Montana":"MT",
+        "Nebraska":"NE",
+        "Nevada":"NV",
+        "New Hampshire":"NH",
+        "New Jersey":"NJ",
+        "New Mexico":"NM",
+        "New York":"NY",
+        "North Carolina":"NC",
+        "North Dakota":"ND",
+        "Ohio":"OH",
+        "Oklahoma":"OK",
+        "Oregon":"OR",
+        "Pennsylvania":"PA",
+        "Rhode Island":"RI",
+        "South Carolina":"SC",
+        "South Dakota":"SD",
+        "Tennessee":"TN",
+        "Texas":"TX",
+        "Utah":"UT",
+        "Vermont":"VT",
+        "Virginia":"VA",
+        "West Virginia":"WV",
+        "Wisconsin":"WI",
+        "Wyoming":"WY"
+    }
     df = pd.read_csv('data2018.csv')
     # df_year = df[(df['Year'] == 2018)]
 
@@ -131,16 +232,31 @@ def index(request):
         annual_avg = int(total/length)
         return annual_avg
 
+    for num, state in state_conv_list.items():
+        if state == request.session['state1']:
+            state_num1 = num
+        if state == request.session['state2']:
+            state_num2 = num
+
+    for state, abbv in states.items():
+        if request.session['state1'] == abbv:
+            state_name1 = state
+        if request.session['state2'] == abbv:
+            state_name2 = state
+            
+    print(state_name1, state_name2)
+
     avg2018 = calc_annual_AVG(2018)
     avg2017 = calc_annual_AVG(2017)
     avg2016 = calc_annual_AVG(2016)
-    st_avg2018 = state_annual_AVG(2018, 46)
-    st_avg2017 = state_annual_AVG(2017, 46)
-    st_avg2016 = state_annual_AVG(2016, 46)
-    # print(avg2016,avg2017,avg2018)
-    # print(st_avg2016,st_avg2017,st_avg2018)
-
-    print(state_jobs(5))
+    st1_avg2018 = state_annual_AVG(2018, state_num1)
+    st1_avg2017 = state_annual_AVG(2017, state_num1)
+    st1_avg2016 = state_annual_AVG(2016, state_num1)
+    st2_avg2018 = state_annual_AVG(2018, state_num2)
+    st2_avg2017 = state_annual_AVG(2017, state_num2)
+    st2_avg2016 = state_annual_AVG(2016, state_num2)
+    
+    
     # fig.show()
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
 
@@ -149,7 +265,7 @@ def index(request):
             datetime.datetime(year=2018, month=1, day=1)]
     
     graph = go.Figure()
-    graph.add_trace(go.Scatter(x=years, y=[st_avg2016, st_avg2017, st_avg2018], name="Washington"))
+    graph.add_trace(go.Scatter(x=years, y=[st1_avg2016, st1_avg2017, st1_avg2018], name=state_name1))
     graph.add_trace(go.Scatter(x=years, y=[avg2016, avg2017, avg2018], name="National Average"))
     graph.update_layout(
         xaxis_range=[datetime.datetime(2016,1,1), datetime.datetime(2018,1,1)],
@@ -393,13 +509,18 @@ def test2(request,st1,st2):
         "Wisconsin":"WI",
         "Wyoming":"WY"
     }
-    
-    line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
+    def drawlineGraph():
+        line_graph = offline.plot(graph, include_plotlyjs=False, output_type='div')
+        return line_graph
+    line_graph = drawlineGraph()
+
     context = {
     'line_graph' : line_graph,
     }
     return render(request,"map/test.html", context)
 
 def test(request,st1,st2):
+    request.session['state1'] = st1
+    request.session['state2'] = st2
+    # drawlineGraph()
     return redirect(f'/test2/{st1}/{st2}')
-    
