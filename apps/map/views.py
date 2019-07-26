@@ -241,11 +241,7 @@ def index(request):
         48: 'WI',
         49: 'WY'}
 
-    
-
-    
-
-    
+    request.session['state2'] = "CA"
 
     for num, state in state_conv_list.items():
         if 'state1' not in request.session:
@@ -261,7 +257,7 @@ def index(request):
     for state, abbv in states.items():
         if request.session['state1'] == abbv:
             state_name1 = state
-        if request.session['state2'] == abbv:
+        if (request.session['state2'] == abbv) and (request.session['state2'] != ""):
             state_name2 = state
             
     print(state_name1, state_name2)
