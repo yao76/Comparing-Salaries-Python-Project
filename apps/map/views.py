@@ -236,11 +236,12 @@ def index(request):
         48: 'WI',
         49: 'WY'}
 
-    request.session['state2'] = "CA"
+    
 
     for num, state in state_conv_list.items():
         if 'state1' not in request.session:
             request.session['state1'] = "WA"
+            request.session['state2'] = "CA"
         else:
             if state == request.session['state1']:
                 state_num1 = num
@@ -536,7 +537,7 @@ def test2(request,st1,st2):
         "Wisconsin":"WI",
         "Wyoming":"WY"
     }
-    
+
     def drawlineGraph():
         line_graph = drawlineGraph()
         return line_graph
@@ -549,8 +550,6 @@ def test2(request,st1,st2):
 def test(request,st1,st2):
     request.session['state1'] = st1
     request.session['state2'] = st2
-    drawlineGraph()
-    return redirect(f'/test2/{st1}/{st2}')
+    # drawlineGraph()
 
-def buildBarChart(st_info1, st_info2, st1_name, st2_name):
-    pass
+    return redirect(f'/test2/{st1}/{st2}')
