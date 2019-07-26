@@ -64,15 +64,15 @@
                 </div>
                 <div class="input-field col s6">
                     <select type="text" name="state" id="state2">
-                        <option value="" selected>Pick a state</option>
+                        <option value="" selected disabled>Select a state</option>
                         {% for key, value in states.items %}
                             <option value="{{value}}">{{key}}</option>
                         {% endfor   %}
                     </select>
                     <label for="state2">Compare State</label>
                 </div>
+                <button onclick = "window.location.href='/'" class="btn">Submit</button>
             </div>
-            <div class="col s5">{{bar_graph | safe}} </div>
         </div>
         <div class="row">
             <div class="col s12">
