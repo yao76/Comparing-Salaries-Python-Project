@@ -1,84 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'>
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Document</title>
     <script>
-        $(document).ready(function(){
-            var st1 = "WA";    
-            var st2;    
-            $('select').formSelect();
-            $("#state1").on('change', function(){
-                st1 = $(this).val();
-                console.log(st1)
-            })
-            $("#state2").on('change', function(e){
+        $(document).ready(function() {
+            var st1 = "WA";
+            var st2;
+            var color="greens";
+            $("select").formSelect();
+            $(".dropdown-trigger").dropdown();
+            $('#dropdown2').on('change', function(e) {
                 e.preventDefault()
-                st2 = $(this).val();
-                console.log(st2)
+                color = $(this).val();
+                console.log(color)
                 $.ajax({
-                    url: `/test/${st1}/${st2}`,
-                    method: 'get',
-                    data: "",
-                    success: function(serverResponse){
-                        $('#popgraph').html(serverResponse);
-                    }
+                    url: `/color/${color}`,
+                    method: "get",
+                    data: ""
+                    })
                 })
-                console.log("list item selected");
+                $("#state1").on("change", function() {
+                    st1 = $(this).val();
+                    console.log(st1);
+                });
+                $("#state2").on("change", function(e) {
+                    e.preventDefault();
+                    st2 = $(this).val();
+            console.log(st2);
+            $.ajax({
+                url: `/test/${st1}/${st2}`,
+                method: "get",
+                data: "",
+                success: function(serverResponse) {
+                    $("#popgraph").html(serverResponse);
+                }
+            });
+            console.log("list item selected");
+            });
         });
-    });
     </script>
     <style>
-    
-    .col {
-        border: 1px solid blue;
-    }
-    
+        /* .col {
+            border: 1px solid blue;
+        } */
     </style>
 </head>
+
 <body>
-        <nav class="green lighten-2 z-depth-0">
-            <span class="brand-logo">CompSal</span>
-        </nav>
-        <div class="row">
-            <div class="col s7">
-                {{map|safe}}
+    <!-- <ul id="dropdown1" class="dropdown-content">
+        <li><a href="#!">Trichromatic/Normal Color</a></li>
+        <li><a href="#!">Deuteranopia</a></li>
+        <li><a value='blue'>Protanopia</a></li>
+        <li><a href="#!">Tritanopia</a></li>
+    </ul> -->
+    <nav class="z-depth-0 green lighten-2">
+        <div class="nav-wrapper ">
+            <span class="brand-logo left">CompSal</span>
+            <ul id="nav-mobile" class="right">
+            <div class="input-field col s6">
+            <select name="color" id="dropdown2">
+                <li><option value="greens"selected>Trichromatic</option></li>
+                <li><option value="blues" >Deuteranopia</option></li>
+                <li><option value="oranges">Protanopia</option></li>
+                <li><option value="reds" >Tritanopia</option></li>
+                
+            </select>
             </div>
-            <div class="col s5">
-                <p>Pick a state to compare values</p>
-                <div class="input-field col s6">
-                    {% csrf_token %}
-                    <select name="state" id="state1">
-                        <option value="WA" selected >Washington</option>
-                        {% for key, value in statesNoWA.items %}
-                            <option value="{{value}}">{{key}}</option>
-                        {% endfor   %}
-                    </select>
-                    <label for="state">State</label>
-                </div>
-                <div class="input-field col s6">
-                    <select type="text" name="state" id="state2">
-                        <option value="" selected>Pick a state</option>
-                        {% for key, value in states.items %}
-                            <option value="{{value}}">{{key}}</option>
-                        {% endfor   %}
-                    </select>
-                    <label for="state2">Compare State</label>
-                </div>
+            </ul>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col s7">
+            {{ map | safe }}
+        </div>
+        <div class="col s5">
+            <p>Pick a state to compare values</p>
+            <div class="input-field col s6">
+            <select name="state" id="state1">
+                <option value="WA" selected>Washington</option>
+                {% for key, value in statesNoWA.items %}
+                <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+            <label for="state">State</label>
+            </div>
+            <div class="input-field col s6">
+            <select type="text" name="state" id="state2">
+                <option value="CA" selected>California</option>
+                {% for key, value in states.items %}
+                <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            </select>
+            <label for="state2">Compare State</label>
             </div>
         </div>
-        <div class="row">
-            <div class="col s12">
-                {{line_graph | safe}}
-            </div>
+        <div class="col s5">{{ bar_graph | safe }}</div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            {{ line_graph | safe }}
         </div>
-        <div id="popgraph"></div>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'></script>
+    </div>
+    <div id="popgraph"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
-</html> 
+</html>
