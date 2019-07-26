@@ -166,27 +166,25 @@ state_conv_list = {
         48: 'WI',
         49: 'WY'}
 
-state_name1 = "Alaska"
-state_num1 = 1
-state_num2 = 4
+
 
 def checkSession(request):
+    state_name1 = "Alaska"
+    state_num1 = 1
+    state_num2 = 4
+    if 'state1' not in request.session:
+            request.session['state1'] = "WA"
+            request.session['state2'] = "CA"
     for num, state in state_conv_list.items():
-        if 'state1' not in request.session:
-                request.session['state1'] = "WA"
-                request.session['state2'] = "CA"
-                
-        else:
-            if state == request.session['state1']:
-                state_num1 = num
-            if state == request.session['state2']:
-                state_num2 = num
-        for state, abbv in states.items():
-            if request.session['state1'] == abbv:
-                state_name1 = state
-            if (request.session['state2'] == abbv):
-                state_name2 = state
-
+        if state == request.session['state1']:
+            state_num1 = num
+        if state == request.session['state2']:
+            state_num2 = num
+    for state, abbv in states.items():
+        if request.session['state1'] == abbv:
+            state_name1 = state
+        if (request.session['state2'] == abbv):
+            state_name2 = state
     return [state_num1, state_name1, state_num2, state_name2]
 
 def drawlineGraph(request):
@@ -258,7 +256,9 @@ def state_jobs(ST_num, jobs=all_jobs):
 
 # Create your views here.
 def index(request):
-    
+    if 'color' not in request.session:
+        request.session['color'] = "greens"
+
     df = pd.read_csv('data2018.csv')
     # df_year = df[(df['Year'] == 2018)]
 
@@ -267,12 +267,14 @@ def index(request):
 
     x = "State: " + df['ST'] + '<br>' + 'Job Title: ' + \
         df['OCC_TITLE'] + '<br>' + 'Annual Sal: ' + '$' + df['A_MEAN']
+    
+    color = request.session['color']
 
     fig = go.Figure(data=go.Choropleth(
         locations=df['ST'],
         z=df['A_MEAN'],
         locationmode='USA-states',
-        colorscale="greens",    #<----Color for map
+        colorscale=color,    #<----Color for map
         autocolorscale=False,
         text=x,  # hover text
         marker_line_color='white',  # line markers between states
@@ -286,116 +288,12 @@ def index(request):
             projection=go.layout.geo.Projection(type='albers usa'),
             showlakes=False,  # lakes
             lakecolor='rgb(255, 255, 255)'),
-        margin=dict(t=5, b=5, r=5, l=5)
+        margin=dict(t=50, b=5, r=5, l=5)
     )
 
     line_graph = drawlineGraph(request)
     
     sal_map = offline.plot(fig, include_plotlyjs=False, output_type='div')
-    
-    states = {
-        "Alabama":"AL",
-        "Alaska":"AK",
-        "Arizona":"AZ",
-        "Arkansas":"AR",
-        "California":"CA",
-        "Colorado":"CO",
-        "Connecticut":"CT",
-        "Delaware":"DE",
-        "Florida":"FL",
-        "Georgia":"GA",
-        "Hawaii":"HI",
-        "Idaho":"ID",
-        "Illinois":"IL",
-        "Indiana":"IN",
-        "Iowa":"IA",
-        "Kansas":"KS",
-        "Kentucky":"KY",
-        "Louisiana":"LA",
-        "Maine":"ME",
-        "Maryland":"MD",
-        "Massachusetts":"MA",
-        "Michigan":"MI",
-        "Minnesota":"MN",
-        "Mississippi":"MS",
-        "Missouri":"MO",
-        "Montana":"MT",
-        "Nebraska":"NE",
-        "Nevada":"NV",
-        "New Hampshire":"NH",
-        "New Jersey":"NJ",
-        "New Mexico":"NM",
-        "New York":"NY",
-        "North Carolina":"NC",
-        "North Dakota":"ND",
-        "Ohio":"OH",
-        "Oklahoma":"OK",
-        "Oregon":"OR",
-        "Pennsylvania":"PA",
-        "Rhode Island":"RI",
-        "South Carolina":"SC",
-        "South Dakota":"SD",
-        "Tennessee":"TN",
-        "Texas":"TX",
-        "Utah":"UT",
-        "Vermont":"VT",
-        "Virginia":"VA",
-        "Washington":"WA",
-        "West Virginia":"WV",
-        "Wisconsin":"WI",
-        "Wyoming":"WY"
-    }
-    statesNoWA = {
-        "Alabama":"AL",
-        "Alaska":"AK",
-        "Arizona":"AZ",
-        "Arkansas":"AR",
-        "California":"CA",
-        "Colorado":"CO",
-        "Connecticut":"CT",
-        "Delaware":"DE",
-        "Florida":"FL",
-        "Georgia":"GA",
-        "Hawaii":"HI",
-        "Idaho":"ID",
-        "Illinois":"IL",
-        "Indiana":"IN",
-        "Iowa":"IA",
-        "Kansas":"KS",
-        "Kentucky":"KY",
-        "Louisiana":"LA",
-        "Maine":"ME",
-        "Maryland":"MD",
-        "Massachusetts":"MA",
-        "Michigan":"MI",
-        "Minnesota":"MN",
-        "Mississippi":"MS",
-        "Missouri":"MO",
-        "Montana":"MT",
-        "Nebraska":"NE",
-        "Nevada":"NV",
-        "New Hampshire":"NH",
-        "New Jersey":"NJ",
-        "New Mexico":"NM",
-        "New York":"NY",
-        "North Carolina":"NC",
-        "North Dakota":"ND",
-        "Ohio":"OH",
-        "Oklahoma":"OK",
-        "Oregon":"OR",
-        "Pennsylvania":"PA",
-        "Rhode Island":"RI",
-        "South Carolina":"SC",
-        "South Dakota":"SD",
-        "Tennessee":"TN",
-        "Texas":"TX",
-        "Utah":"UT",
-        "Vermont":"VT",
-        "Virginia":"VA",
-        "West Virginia":"WV",
-        "Wisconsin":"WI",
-        "Wyoming":"WY"
-    }
     
     context = {
     'map': sal_map,
@@ -406,16 +304,25 @@ def index(request):
     return render(request, "map/index.html", context)
 
 
-def test2(request,st1,st2):
+def test2(request, st1, st2):
     print(st1, st2)
     line_graph = drawlineGraph(request)
     context = {
-    'line_graph' : line_graph,
+        'line_graph': line_graph,
+        
     }
-    return render(request,"map/test.html", context)
+    return render(request, "map/test.html", context)
 
-def test(request,st1,st2):
+
+def test(request, st1, st2):
     request.session['state1'] = st1
     request.session['state2'] = st2
+    print(st1, st2)
     drawlineGraph(request)
     return redirect(f'/test2/{st1}/{st2}')
+
+
+def color(request, c1):
+    request.session['color'] = c1
+    print(request.session['color'])
+    return redirect('/')
